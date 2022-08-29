@@ -15,6 +15,7 @@ we need to disable swap because kubernetes require to disable SWAP.
 2. Edit your SWAP in /etc/fstab so, it will be off on reboot.
 
 sudo swapoff -a
+
 sudo sed 's/\(^\/swap\)/#\/swap/g' -i /etc/fstab
 
 ### Set Modprobe ###
@@ -23,19 +24,27 @@ sudo sed 's/\(^\/swap\)/#\/swap/g' -i /etc/fstab
 2. Add /etc/modules-load.d/k8s.conf file for permanent changes 
 
 sudo modprobe overlay
+
 sudo modprobe br_netfilter
 
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+
 overlay
+
 br_netfilter
+
 EOF
 
 ### Set sysctl Params ###
 
 cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+
 net.bridge.bridge-nf-call-iptables  = 1
+
 net.bridge.bridge-nf-call-ip6tables = 1
+
 net.ipv4.ip_forward                 = 1
+
 EOF
 
 ### Apply sysctl ###
@@ -45,11 +54,13 @@ sudo sysctl --system
 ### Install Containerd ###
 
 sudo apt-get update
+
 sudo apt-get install -y containerd
 
 ### Create container configuration ###
 
 sudo mkdir -p /etc/containerd
+
 sudo containerd config default | sudo tee /etc/containerd/config.toml
 
 ### change SystemdCgroup = false to SystemdCgroup = true ###
@@ -59,6 +70,7 @@ sudo sed -i 's/SystemdCgroup = false/SystemdCgroup = true/' /etc/containerd/conf
 ### Restart & check status of containerd 
 
 sudo systemctl restart containerd
+
 sudo systemctl status containerd
 
 ## Install kubernetes packages ##
@@ -78,6 +90,7 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 ### update package list ###
 
 sudo apt-get update
+
 apt-cache policy kubelet | head -n 20 
 
 ### Install the required packages ###
@@ -87,7 +100,9 @@ apt-cache policy kubelet | head -n 20
 3. Mark these packages as hold to beaing update
 
 VERSION=1.24.4-00
+
 sudo apt-get install -y kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
+
 sudo apt-mark hold kubelet kubeadm kubectl containerd
 
 ### systemd Units ###
@@ -95,7 +110,9 @@ sudo apt-mark hold kubelet kubeadm kubectl containerd
 2. enable kubelet and containerd for run on boot
 
 sudo systemctl status kubelet.service 
+
 sudo systemctl status containerd.service 
 
 sudo systemctl enable kubelet.service
+
 sudo systemctl enable containerd.service
