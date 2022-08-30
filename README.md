@@ -106,6 +106,7 @@ sudo apt-get install -y kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
 sudo apt-mark hold kubelet kubeadm kubectl containerd
 
 ### systemd Units ###
+
 1. Check the status of our kubelet and our container runtime, containerd.
 2. enable kubelet and containerd for run on boot
 
@@ -116,3 +117,37 @@ sudo systemctl status containerd.service
 sudo systemctl enable kubelet.service
 
 sudo systemctl enable containerd.service
+
+### Creating a Cluster ###
+
+Create our kubernetes cluster, specify a pod network range that does not matching that in your network only on the Control Plane Node, download the yaml files for the pod network.
+
+wget https://docs.projectcalico.org/manifests/calico.yaml
+
+### Initiat Kubernetes Cluster ###
+
+sudo kubeadm init
+
+### Move .kube folder to non-root user ###
+
+mkdir -p $HOME/.kube
+
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+### Create POD Network ###
+
+kubectl apply -f calico.yaml
+
+### Get All PODs ###
+
+kubectl get pods --all-namespaces
+
+### Get Nodes ###
+
+kubectl get nodes
+
+### Check Kubelet Status ###
+
+sudo systemctl status kubelet.service
