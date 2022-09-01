@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wp-deployment
+  namespace: wp-namespace
+spec:
+  selector:
+    matchLabels:
+      app: wp-deployment
+  template:
+    metadata:
+      labels:
+        app: wp-deployment
+    spec:
+      containers:
+      - name: wp-deployment
+        image: wordpress:4.8-apache
+        resources: {}
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: wp-deployment
+        - name: WORDPRESS_DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
+        ports:
+        - containerPort: 80
+          name: wp-deployment
+        volumeMounts:
+        - name:  wp-pv
+          mountPath:  /var/www/html
+      volumes:
+      - name: wp-pv
+        persistentVolumeClaim:
+          claimName: wp-pvc

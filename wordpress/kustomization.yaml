@@ -1,0 +1,15 @@
+#secretGenerator:
+#  - name: mysql-pass
+#    literals:
+#    - password=YourSecurePassword
+resources:
+  - wp-namespace.yaml
+  - wp-secret.yaml
+  - mysql-pv.yaml
+  - mysql-pvc.yaml
+  - mysql-service.yaml
+  - wp-mysql.yaml
+  - wp-pv.yaml
+  - wp-pvc.yaml
+  - wp-service.yaml
+  - wp-deploy.yaml
