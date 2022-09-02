@@ -3,22 +3,26 @@ kind: Deployment
 metadata:
   name: wp-deployment
   namespace: wp-namespace
+  labels:
+    app: wordpress
 spec:
   selector:
     matchLabels:
-      app: wp-deployment
+      app: wordpress
+      tier: frontend
   template:
     metadata:
       labels:
-        app: wp-deployment
+        app: wordpress
+        tier: frontend
     spec:
       containers:
-      - name: wp-deployment
+      - name: wordpress
         image: wordpress:4.8-apache
         resources: {}
         env:
         - name: WORDPRESS_DB_HOST
-          value: wp-deployment
+          value: wp-mysql
         - name: WORDPRESS_DB_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -26,7 +30,7 @@ spec:
               key: password
         ports:
         - containerPort: 80
-          name: wp-deployment
+          name: wordpress
         volumeMounts:
         - name:  wp-pv
           mountPath:  /var/www/html

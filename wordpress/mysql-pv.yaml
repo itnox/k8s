@@ -1,8 +1,10 @@
-apiVersion: v1
+piVersion: v1
 kind: PersistentVolume
 metadata:
   name: mysql-pv
   namespace: wp-namespace
+  labels:
+    app: wordpress
 spec:
   capacity:
     storage: 2Gi

@@ -8,7 +8,7 @@ resources:
   - mysql-pv.yaml
   - mysql-pvc.yaml
   - mysql-service.yaml
-  - wp-mysql.yaml
+  - mysql-deploy.yaml
   - wp-pv.yaml
   - wp-pvc.yaml
   - wp-service.yaml

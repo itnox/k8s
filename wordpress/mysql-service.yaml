@@ -1,18 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
+  name: wp-mysql
   namespace: wp-namespace
   labels:
-    app: mysql-service
-  name: mysql-service
+    app: wordpress
 spec:
   ports:
-  - name: mysql-port
-    port: 3306
-    protocol: TCP
+    - port: 3306
   selector:
-    app: wp-deployment
+    app: wordpress
     tier: mysql
   clusterIP: None
-status:
-  loadBalancer: {}

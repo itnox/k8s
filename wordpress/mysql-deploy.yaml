@@ -2,20 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   namespace: wp-namespace
-  name: wp-mysql
+  name: mysql-deployment
   labels:
-    app: wp-deployment
+    app: wordpress
 spec:
   selector:
     matchLabels:
-      app: wp-deployment
+      app: wordpress
       tier: mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: wp-deployment
+        app: wordpress
         tier: mysql
     spec:
       containers:

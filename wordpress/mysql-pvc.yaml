@@ -4,7 +4,7 @@ metadata:
   namespace: wp-namespace
   name: mysql-pvc
   labels:
-    app: wp-deployment
+    app: wordpress
 spec:
   accessModes:
     - ReadWriteMany
