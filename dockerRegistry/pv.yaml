@@ -12,3 +12,4 @@ spec:
     path: /var/nfs/general/docker-registry
     server: 192.168.10.61
   persistentVolumeReclaimPolicy: Retain
+  storageClassName: docker-registry-nfs-storage
